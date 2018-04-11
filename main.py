@@ -5,8 +5,8 @@ from bomb import *
 from mapGrid import *
 from playerKeys import *
 
-player1 = Character([5,9], "green")
-player2 = Character([4,0], "red")
+player1 = Character([9,9], "green")
+player2 = Character([0,0], "red")
 
 #kill player
 def killPlayer(position):
