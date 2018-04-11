@@ -4,7 +4,7 @@ Created on 10 Apr. 2018
 @author: bob
 '''
 import pygame
-from src.first.bomb import Bomb
+from bomb import *
 
 def playerKeys(keypress, myboard, player1, player2, bombs):
     # for player 1 movement
