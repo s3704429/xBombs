@@ -1,9 +1,9 @@
 import pygame
-from src.first.character import Character
-from src.first.terrain import Terrain
-from src.first.bomb import Bomb
-from src.first.mapGrid import MapGrid
-from src.first.playerKeys import playerKeys
+from character import *
+from terrain import *
+from bomb import *
+from mapGrid import *
+from playerKeys import *
 
 player1 = Character([5,9], "green")
 player2 = Character([4,0], "red")
