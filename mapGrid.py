@@ -3,7 +3,7 @@ Created on 11 Apr. 2018
 
 @author: bob
 '''
-from src.first.terrain import Terrain
+from terrain import *
 
 
 class MapGrid(object):
