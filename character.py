@@ -74,7 +74,7 @@ class Character():
             self.walkCount = 0
 
         if not (self.standing):
-              if self.down:
+            if self.down:
                 window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))
                 self.walkCount += 1            
             elif self.up:
