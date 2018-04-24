@@ -7,21 +7,14 @@ from bomb import *
 characterSpeed = 3
 CELLSIZE = 50
 
-char1WalkDown = [pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'),pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png'),pygame.image.load('DOWNleftfoot.png')]
-char1WalkUp = [pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'),pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png')]
-char1WalkLeft = [pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'),pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png')]
-char1WalkRight = [pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'),pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNrightfoot.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNstill.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png'), pygame.image.load('DOWNleftfoot.png')]
-
-            
+char1WalkDown = [pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNstill.png'),pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNleftfoot.png'), pygame.image.load('images/DOWNleftfoot.png'),pygame.image.load('images/DOWNleftfoot.png')]
+char1WalkUp = [pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'),pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png')]
+char1WalkLeft = [pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'),pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png')]
+char1WalkRight = [pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'),pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png')]
+           
         
 
 class Character():
-
-
-    
-   
-
-
 
 
     def __init__(self, x, y, position, colour):
@@ -81,17 +74,17 @@ class Character():
             self.walkCount = 0
 
         if not (self.standing):
-            if self.down:
+              if self.down:
                 window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))
                 self.walkCount += 1            
             elif self.up:
-                window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))            
+                window.blit(char1WalkUp[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1              
             elif self.left:
-                window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))            
+                window.blit(char1WalkLeft[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1
             elif self.right:
-                window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))            
+                window.blit(char1WalkRight[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1  
         else:
             window.blit(char1WalkDown[0], (self.X,self.Y))
