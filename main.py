@@ -91,7 +91,7 @@ def displayBoard(board, screen):
                     
                     # bomb destroys everything it can
                     ''' in wrong place. Should not be in display function. Need to Move and separate graphics and grid code'''
-                    
+                    killPlayer([indexX,indexY])
                     for explode in range(1, y.blastRadius+1):  
                         if indexX+explode < 10:
                             
@@ -106,7 +106,8 @@ def displayBoard(board, screen):
                             elif board[indexX+explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*50,(indexX+explode)*50,50,50))
                                 board[indexX+explode][indexY] = 0
-                                break
+                            elif board[indexX+explode][indexY].material == 'bomb':
+                                board[indexX+explode][indexY].fuse = 0
                             elif board[indexX+explode][indexY].material == 'hard':
                                 break
                     
@@ -121,7 +122,8 @@ def displayBoard(board, screen):
                             elif board[indexX-explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*50,(indexX-explode)*50,50,50))
                                 board[indexX-explode][indexY] = 0
-                                break
+                            elif board[indexX-explode][indexY].material == 'bomb':    
+                                board[indexX-explode][indexY].fuse = 0
                             elif board[indexX-explode][indexY].material == 'hard':
                                 break
                         
@@ -138,7 +140,8 @@ def displayBoard(board, screen):
                             elif board[indexX][indexY-explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY-explode)*50,(indexX)*50,50,50))
                                 board[indexX][indexY-explode] = 0
-                                break
+                            elif board[indexX][indexY-explode].material == 'bomb':    
+                                board[indexX][indexY-explode].fuse = 0
                             elif board[indexX][indexY-explode].material == 'hard':
                                 break
                         
@@ -156,7 +159,8 @@ def displayBoard(board, screen):
                             elif board[indexX][indexY+explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY+explode)*50,(indexX)*50,50,50))
                                 board[indexX][indexY+explode] = 0
-                                break
+                            elif board[indexX][indexY+explode].material == 'bomb':
+                                board[indexX][indexY+explode].fuse = 0   
                             elif board[indexX][indexY+explode].material == 'hard':
                                 break
                                            
