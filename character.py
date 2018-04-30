@@ -87,7 +87,18 @@ class Character():
                 window.blit(char1WalkRight[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1  
         else:
-            window.blit(char1WalkDown[0], (self.X,self.Y))
+            if self.down:
+                window.blit(char1WalkDown[0], (self.X,self.Y))
+                self.walkCount += 1            
+            elif self.up:
+                window.blit(char1WalkUp[0], (self.X,self.Y))            
+                self.walkCount += 1              
+            elif self.left:
+                window.blit(char1WalkLeft[0], (self.X,self.Y))            
+                self.walkCount += 1
+            elif self.right:
+                window.blit(char1WalkRight[0], (self.X,self.Y))            
+                self.walkCount += 1  
             
         
     def moveUp(self, myboard):
