@@ -150,7 +150,8 @@ class Character():
             self.right = True       
     
     def dropBomb(self, myboard, bombs):
-        myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', 90, self.bombStrength, self, self.position)
-        bombs.append(self.position);
-        self.bombsTotal -= 1
+        if myboard.myboard[self.position[0]][self.position[1]] == 0 and self.bombsTotal > 0:
+           myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', 90, self.bombStrength, self, self.position)
+           bombs.append(self.position);
+           self.bombsTotal -= 1
     
