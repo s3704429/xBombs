@@ -23,7 +23,7 @@ p1Death = pygame.mixer.Sound('sound/sfx_deathscream_human5.wav')
 p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
 pygame.mixer.music.load('sound/01 A Night Of Dizzy Spells.mp3') 
 
-
+background = pygame.image.load('images/Grass_50x50.png')
      
       
 
@@ -68,6 +68,10 @@ def displayBoard(board, screen):
     for indexX, x in enumerate(board):
         for indexY, y in enumerate(x):
             
+            # if grid cell is empty load path grass image    
+            if y == 0:
+                screen.blit(background, (indexY*CELLSIZE,indexX*CELLSIZE))   
+               
             # if terrain object then display at the corresponding coordinates
             if isinstance(y, Terrain):
                 if y.material == 'soft':
