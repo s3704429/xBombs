@@ -24,7 +24,7 @@ class Character():
         self.colour = colour # string
         self.score = 0 # int
         self.bombsTotal = 1 # int
-        self.bombStrength = 3 # int
+        self.bombStrength = 2 # int
         
         self.powerUps = [0] # list
         self.material = 'soft' # string
