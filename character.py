@@ -1,7 +1,6 @@
 import pygame
 import random
 from bomb import *
-from pyasn1.compat.octets import null
 
 # characterWidth = CELLSIZE 
 # characterHeight = CELLSIZE
@@ -22,19 +21,13 @@ char1WalkRight = [pygame.image.load('images/RIGHTstill.png'), pygame.image.load(
 class Character():
 
 
-    
-   
-
-
-
-
     def __init__(self, x, y, position, colour):
        
         self.status = "alive" # string
         self.position = position # list
         self.colour = colour # string
         self.score = 0 # int
-        self.bombsTotal = 3 # int
+        self.bombsTotal = 2 # int
         self.bombStrength = 2 # int
         
         self.powerUps = [0] # list
@@ -117,7 +110,7 @@ class Character():
             if self.position[0] > 0 and myboard.getGridObject(self.position, 0, -1) == 0:
                 self.position[0] -= 1
         if self.position[0] > 0 and myboard.getGridObject(self.position, 0, -1) != 0 and self.X < (self.position[0])*CELLSIZE+20:    
-            null    
+            pass   
         if self.Y > ((self.position[0])*CELLSIZE)-40:
             self.Y -= self.speed # characterSpeed
 
@@ -132,7 +125,7 @@ class Character():
             if self.position[0] < BOARDSIZEY-1 and myboard.getGridObject(self.position, 0, 1) == 0:
                 self.position[0] += 1
         if self.position[0] < BOARDSIZEY-1 and myboard.getGridObject(self.position, 0, 1) != 0 and self.Y > (self.position[0])*CELLSIZE-5:    
-            null
+            pass
         elif self.Y < (self.position[0])*CELLSIZE+11:
             self.Y += self.speed # characterSpeed
         
@@ -148,7 +141,7 @@ class Character():
             if self.position[1] > 0 and myboard.getGridObject(self.position, -1, 0) == 0:
                 self.position[1] -= 1
         if self.position[1] > 0 and myboard.getGridObject(self.position, -1, 0) != 0 and self.X < (self.position[1])*CELLSIZE-5:    
-            null
+            pass
         elif self.X > (self.position[1])*CELLSIZE-20:
             self.X -= self.speed # characterSpeed     
     
@@ -164,7 +157,7 @@ class Character():
             if self.position[1] < BOARDSIZEX-1 and myboard.getGridObject(self.position, 1, 0) == 0:
                 self.position[1] += 1
         if self.position[1] < BOARDSIZEX-1 and myboard.getGridObject(self.position, 1, 0) != 0 and self.X > (self.position[1])*CELLSIZE+5:    
-            null
+            pass
         elif self.X < (self.position[1])*CELLSIZE+20:
             self.X += self.speed # characterSpeed
 
