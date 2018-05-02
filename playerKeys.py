@@ -1,3 +1,8 @@
+'''
+Created on 10 Apr. 2018
+
+@author: bob
+'''
 import pygame
 from bomb import *
 

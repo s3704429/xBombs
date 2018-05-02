@@ -14,7 +14,7 @@ class Bomb(object):
         '''
         Constructor
         '''
-        self.material = material # string
+        self.material = "bomb" # string
         self.fuse = time # int
         self.blastRadius = blastRadius # int
         self.droppedBy = player # 

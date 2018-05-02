@@ -1,10 +1,7 @@
-'''
-Created on 11 Apr. 2018
-
-@author: bob
-'''
 from terrain import *
 
+BOARDSIZEX = 13
+BOARDSIZEY = 13
 
 class MapGrid(object):
     '''
@@ -19,10 +16,12 @@ class MapGrid(object):
         # initiate grid via list of lists
         self.myboard = []
                 
-        for numLoop in range(10):
-            self.myboard.append([0,0,0,0,0,0,0,0,0,0])
+        for numLoop in range(BOARDSIZEX):
+            self.myboard.append([0,0,0,0,0,0,0,0,0,0,0,0,0])
+            
         
-       # load terrain to board
+        
+        # load terrain to board
         
         # terrain map objects - co-ordinates - Aarons example map from Assignment 2
         hard = [[0,4],[0,5],[1,1],[1,2],[1,7],[1,8],[2,1],[2,4],[2,5],[2,8],[4,2],[4,4],[4,5],[4,7],[4,9],
