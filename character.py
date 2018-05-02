@@ -4,6 +4,9 @@ from bomb import *
 
 # characterWidth = CELLSIZE 
 # characterHeight = CELLSIZE
+BOARDSIZEX = 10
+BOARDSIZEY = 10
+
 characterSpeed = 3
 CELLSIZE = 50
 
@@ -11,7 +14,8 @@ char1WalkDown = [pygame.image.load('images/DOWNstill.png'), pygame.image.load('i
 char1WalkUp = [pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'),pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png')]
 char1WalkLeft = [pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'),pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png')]
 char1WalkRight = [pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'),pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png')]
-           
+
+            
         
 
 class Character():
@@ -102,67 +106,71 @@ class Character():
             
         
     def moveUp(self, myboard):
-        
-        if self.Y <= (self.position[0]*50): 
+        if self.Y <= (self.position[0]*CELLSIZE)-30: 
             if self.position[0] > 0 and myboard.getGridObject(self.position, 0, -1) == 0:
                 self.position[0] -= 1
-            
-        if self.Y > (self.position[0])*50:
+        if self.position[0] > 0 and myboard.getGridObject(self.position, 0, -1) != 0 and self.X < (self.position[0])*CELLSIZE+20:    
+            pass   
+        if self.Y > ((self.position[0])*CELLSIZE)-40:
             self.Y -= self.speed # characterSpeed
 
-            self.standing = False
-            self.down = False
-            self.up = True
-            self.left = False
-            self.right = False
+        self.standing = False
+        self.down = False
+        self.up = True
+        self.left = False
+        self.right = False
             
     def moveDown(self, myboard):
-        if self.Y >= (self.position[0]*50): 
-            if self.position[0] < 9 and myboard.getGridObject(self.position, 0, 1) == 0:
+        if self.Y >= (self.position[0]*CELLSIZE+10): 
+            if self.position[0] < BOARDSIZEY-1 and myboard.getGridObject(self.position, 0, 1) == 0:
                 self.position[0] += 1
-         
-        if self.Y < (self.position[0])*50:  
+        if self.position[0] < BOARDSIZEY-1 and myboard.getGridObject(self.position, 0, 1) != 0 and self.Y > (self.position[0])*CELLSIZE-5:    
+            pass
+        elif self.Y < (self.position[0])*CELLSIZE+11:
             self.Y += self.speed # characterSpeed
-    
-            self.standing = False
-            self.down = True
-            self.up = False
-            self.left = False
-            self.right = False
-    
+        
+        self.standing = False
+        self.down = True
+        self.up = False
+        self.left = False
+        self.right = False
+        
     def moveLeft(self, myboard):
         
-        if self.X <= (self.position[1]*50):  
+        if self.X <= (self.position[1]*CELLSIZE)-20:  
             if self.position[1] > 0 and myboard.getGridObject(self.position, -1, 0) == 0:
                 self.position[1] -= 1
-            
-        if self.X > (self.position[1])*50:
+        if self.position[1] > 0 and myboard.getGridObject(self.position, -1, 0) != 0 and self.X < (self.position[1])*CELLSIZE-5:    
+            pass
+        elif self.X > (self.position[1])*CELLSIZE-20:
             self.X -= self.speed # characterSpeed     
     
-            self.standing = False
-            self.down = False
-            self.up = False
-            self.left = True
-            self.right = False      
+        self.standing = False
+        self.down = False
+        self.up = False
+        self.left = True
+        self.right = False      
     
     def moveRight(self, myboard):
         
-        if self.X >= (self.position[1]*50): 
-            if self.position[1] < 9 and myboard.getGridObject(self.position, 1, 0) == 0:
+        if self.X >= (self.position[1]*CELLSIZE)+20: 
+            if self.position[1] < BOARDSIZEX-1 and myboard.getGridObject(self.position, 1, 0) == 0:
                 self.position[1] += 1
-    
-        if self.X < (self.position[1])*50:
+        if self.position[1] < BOARDSIZEX-1 and myboard.getGridObject(self.position, 1, 0) != 0 and self.X > (self.position[1])*CELLSIZE+5:    
+            pass
+        elif self.X < (self.position[1])*CELLSIZE+20:
             self.X += self.speed # characterSpeed
 
-            self.standing = False
-            self.down = False
-            self.up = False
-            self.left = False
-            self.right = True       
+        self.standing = False
+        self.down = False
+        self.up = False
+        self.left = False
+        self.right = True       
     
     def dropBomb(self, myboard, bombs):
         if myboard.myboard[self.position[0]][self.position[1]] == 0 and self.bombsTotal > 0:
-           myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', 90, self.bombStrength, self, self.position)
-           bombs.append(self.position);
-           self.bombsTotal -= 1
+            myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', 90, self.bombStrength, self, self.position)
+            bombs.append(self.position);
+            self.bombsTotal -= 1
+        
     
