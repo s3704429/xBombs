@@ -23,7 +23,7 @@ class Character():
         self.position = position # list
         self.colour = colour # string
         self.score = 0 # int
-        self.bombsTotal = 1 # int
+        self.bombsTotal = 2 # int
         self.bombStrength = 2 # int
         
         self.powerUps = [0] # list
