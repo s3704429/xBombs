@@ -5,8 +5,8 @@ from pyasn1.compat.octets import null
 
 # characterWidth = CELLSIZE 
 # characterHeight = CELLSIZE
-BOARDSIZEX = 13
-BOARDSIZEY = 13
+BOARDSIZEX = 10
+BOARDSIZEY = 10
 
 characterSpeed = 3
 CELLSIZE = 50
