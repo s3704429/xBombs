@@ -24,8 +24,7 @@ p1Death = pygame.mixer.Sound('sound/sfx_deathscream_human5.wav')
 p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
 pygame.mixer.music.load('sound/01 A Night Of Dizzy Spells.mp3') 
 
-background = pygame.image.load('images/Grass_50x50.jpg')
-boomImg = pygame.image.load('images/boom_50x50.jpg')     
+background = pygame.image.load('images/Grass_50x50.jpg')    
       
 
 #kill player
@@ -123,8 +122,8 @@ def displayBoard(board, screen):
                             #explode down    
                             ''' grid empty show explode '''
                             if board[indexX+explode][indexY] == 0:
-                                #pygame.draw.rect(screen, (200, 200, 100), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                screen.blit(boomImg, ((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE))
+                                pygame.draw.rect(screen, (200, 200, 100), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
+                         
                                 #board[indexX+explode][indexY] = 0
                             # if soft terrain then explode 
                             elif board[indexX+explode][indexY].material == 'soft':
