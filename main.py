@@ -7,13 +7,13 @@ from playerKeys import *
 from powerup import *
 
 
-BOARDSIZEX = 10
-BOARDSIZEY = 10
+BOARDSIZEX = 13
+BOARDSIZEY = 13
 CELLSIZE = 50
 
 
 # preload players
-player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [9,9], "green")
+player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [BOARDSIZEX-1,BOARDSIZEY-1], "green")
 player2 = Character(0,0, [0,0], "red")
 
 # load sound and music
@@ -25,13 +25,14 @@ p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
 pygame.mixer.music.load('sound/01 A Night Of Dizzy Spells.mp3') 
 
 background = pygame.image.load('images/Grass_50x50.jpg')
-     
+boomImg = pygame.image.load('images/boom_50x50.jpg')     
       
 
 #kill player
-def killPlayer(position):
+def killPlayer(position, bomb):
     if player1.position == position:
         p1Death.play()
+        bomb.droppedBy.score += 1
         if player2.position == [0,0] or player1.position == [0,0]:
             player1.position = [BOARDSIZEX-1,0]
             player1.X = 0*CELLSIZE
@@ -42,6 +43,7 @@ def killPlayer(position):
             player1.Y = 0*CELLSIZE
     if player2.position == position:
         p2Death.play()
+        bomb.droppedBy.score += 1
         if player1.position == [0,BOARDSIZEY-1] or player2.position == [0,BOARDSIZEY-1]:
             player2.position = [BOARDSIZEX-1,BOARDSIZEY-1]
             player2.X = (BOARDSIZEX-1)*CELLSIZE
@@ -73,7 +75,7 @@ def displayBoard(board, screen):
             
             if y == 0:
                 screen.blit(background, (indexY*CELLSIZE,indexX*CELLSIZE))
-                
+                pass
             # power up display
             if isinstance(y, Powerup):
                 screen.blit(pygame.image.load(y.image), (indexY*CELLSIZE,indexX*CELLSIZE))
@@ -105,7 +107,7 @@ def displayBoard(board, screen):
                     ''' in wrong place. Should not be in display function. Need to Move and separate graphics and grid code'''
                     
                     ''' kill player if they are in the grid they dropped the bomb '''
-                    killPlayer([indexX,indexY])
+                    killPlayer([indexX,indexY], y)
                     
                     ''' explode bomb and check all grid spaces in bombs wake '''
                     
@@ -115,42 +117,46 @@ def displayBoard(board, screen):
                             
                             ''' kill player if they are in grid'''
                             # if player is grid kill player.
-                            killPlayer([indexX+explode,indexY])
+                            killPlayer([indexX+explode,indexY], y)
                                 
                                 
                             #explode down    
                             ''' grid empty show explode '''
                             if board[indexX+explode][indexY] == 0:
-                                pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX+explode][indexY] = 0
+                                #pygame.draw.rect(screen, (200, 200, 100), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
+                                screen.blit(boomImg, ((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE))
+                                #board[indexX+explode][indexY] = 0
                             # if soft terrain then explode 
                             elif board[indexX+explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
                                 
-                                board[indexX+explode][indexY] = Powerup('soft',900)
+                                # leave a power up once terrain explodes.
+                                board[indexX+explode][indexY] = Powerup('power',900)
+                                break
                             # if a bomb, trigger bombs explosion 
                             elif board[indexX+explode][indexY].material == 'bomb':    
                                 board[indexX+explode][indexY].fuse = 0
                             # if hard terrain, stop blast 
-                            #elif board[indexX+explode][indexY].material == 'hard':
-                                
+                            elif board[indexX+explode][indexY].material == 'hard':
+                                break
                             
                     
                     for explode in range(1, y.blastRadius+1):      
                         if indexX-explode > -1:
-                            killPlayer([indexX-explode,indexY])    
+                            killPlayer([indexX-explode,indexY], y)    
                             
                             #explode up
                             if board[indexX-explode][indexY] == 0:
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX-explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX-explode][indexY] = 0
+                                #board[indexX-explode][indexY] = 0
                             elif board[indexX-explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX-explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX-explode][indexY] = 0                                
+                                board[indexX-explode][indexY] = Powerup('power',900)
+                                break                                
                             elif board[indexX-explode][indexY].material == 'bomb':    
                                 board[indexX-explode][indexY].fuse = 0
-                            #elif board[indexX-explode][indexY].material == 'hard':
-                                
+                            elif board[indexX-explode][indexY].material == 'hard':
+                                break
                             
                         
                     for explode in range(1, y.blastRadius+1): 
@@ -158,18 +164,19 @@ def displayBoard(board, screen):
                         if indexY-explode > -1:
                             
                         # if player in grid kill player.
-                            killPlayer([indexX,indexY-explode])
+                            killPlayer([indexX,indexY-explode], y)
                             
                             if board[indexX][indexY-explode] == 0:
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY-explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY-explode] = 0
+                                #board[indexX][indexY-explode] = 0
                             elif board[indexX][indexY-explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY-explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY-explode] = 0
+                                board[indexX][indexY-explode] = Powerup('power',900)
+                                break
                             elif board[indexX][indexY-explode].material == 'bomb':    
                                 board[indexX][indexY-explode].fuse = 0
-                            #elif board[indexX][indexY-explode].material == 'hard':
-                                
+                            elif board[indexX][indexY-explode].material == 'hard':
+                                break
                             
                         
                     for explode in range(1, y.blastRadius+1):   
@@ -177,19 +184,21 @@ def displayBoard(board, screen):
                         if indexY+explode < BOARDSIZEY:
                             
                             # if player is in grid ref kill player.
-                            killPlayer([indexX,indexY+explode])
+                            killPlayer([indexX,indexY+explode], y)
                            
                         
                             if board[indexX][indexY+explode] == 0:
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY+explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY+explode] = 0
+                                #board[indexX][indexY+explode] = 0
                             elif board[indexX][indexY+explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY+explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY+explode] = 0
+                                board[indexX][indexY+explode] = Powerup('power',900)
+                                break
                             elif board[indexX][indexY+explode].material == 'bomb':    
-                                board[indexX][indexY+explode].fuse = 0    
-                            #elif board[indexX][indexY+explode].material == 'hard':
-                                
+                                board[indexX][indexY+explode].fuse = 0  
+                                break  
+                            elif board[indexX][indexY+explode].material == 'hard':
+                                break
                             
                                            
                     # remove bomb from board
@@ -204,8 +213,10 @@ def displayBoard(board, screen):
 
 
 class Main:
+    
+    mapNumber = input("Which map? 1 to 3 : ")
      
-    myboard = MapGrid()
+    myboard = MapGrid(mapNumber)
     
     # list of bombs coordinates in grid. 
     bombs = []
@@ -242,9 +253,17 @@ class Main:
         # do character actions acording to key presses
         playerKeys(keypress, myboard, player1, player2, bombs)
        
-        # display graphics frame of board.            
+        # quit game by pressing p
+        if keypress[pygame.K_p]:
+            end = 'quit'
+       
+       
+        # display graphics frame of board.
         displayBoard(myboard.myboard, screen)
                 
         pygame.display.update()
         
-        clock.tick(30)
+        clock.tick(60)
+        
+        
+    print("\nScores : \n\nPlayer 1 : ", player1.score, "\nPlayer 2 : ", player2.score)

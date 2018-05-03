@@ -25,5 +25,9 @@ class Powerup(object):
         screen.blit(blastImage, (x,y))
 
 	#blast(x,y)
+    
+    def grabPowerup(self, player):
+        player.bombStrength += 1
+        player.speed += 1
 
 #drop_powerup(screen, (indexY)*CELLSIZE,(indexX-explode)*CELLSIZE)
