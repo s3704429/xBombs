@@ -10,8 +10,7 @@ from bomb import *
 def playerKeys(keypress, myboard, player1, player2, bombs):
     # for player 1 movement
     if keypress[pygame.K_UP]:
-        player1.moveUp(myboard)
-                
+        player1.moveUp(myboard)        
             
     if keypress[pygame.K_DOWN]:
         player1.moveDown(myboard)
@@ -48,4 +47,5 @@ def playerKeys(keypress, myboard, player1, player2, bombs):
 
     if keypress[pygame.K_w] != True and keypress[pygame.K_a] != True and keypress[pygame.K_s] != True and keypress[pygame.K_d] != True:
         player2.standing = True
+        
     
