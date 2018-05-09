@@ -5,6 +5,7 @@ from bomb import *
 from mapGrid import *
 from playerKeys import *
 from powerup import *
+import random
 
 
 BOARDSIZEX = 13
@@ -22,9 +23,10 @@ pygame.mixer.init()
 explodeSound = pygame.mixer.Sound('sound/Explosion1.wav')
 p1Death = pygame.mixer.Sound('sound/sfx_deathscream_human5.wav')
 p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
-pygame.mixer.music.load('sound/01 A Night Of Dizzy Spells.mp3') 
+pygame.mixer.music.load('sound/01 A Night Of Dizzy Spells.mp3')
 
-background = pygame.image.load('images/Grass_50x50.jpg')    
+background = pygame.image.load('images/Grass_50x50.jpg')
+
       
 
 #kill player
@@ -109,7 +111,7 @@ def displayBoard(board, screen):
                     killPlayer([indexX,indexY], y)
                     
                     ''' explode bomb and check all grid spaces in bombs wake '''
-                    
+                    powerUpDrop = random.randint(0,2)
                     ''' range and bounds check'''
                     for explode in range(1, y.blastRadius+1):  
                         if indexX+explode < BOARDSIZEX:
@@ -124,14 +126,16 @@ def displayBoard(board, screen):
                             if board[indexX+explode][indexY] == 0:
                                 pygame.draw.rect(screen, (200, 200, 100), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
                          
-                                #board[indexX+explode][indexY] = 0
                             # if soft terrain then explode 
                             elif board[indexX+explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                
                                 # leave a power up once terrain explodes.
-                                board[indexX+explode][indexY] = Powerup('power',900)
-                                break
+                                if powerUpDrop==0:
+                                    board[indexX+explode][indexY] = Powerup('power',900)
+                                    break
+                                else:
+                                    board[indexX+explode][indexY] = 0
+                                    break
                             # if a bomb, trigger bombs explosion 
                             elif board[indexX+explode][indexY].material == 'bomb':    
                                 board[indexX+explode][indexY].fuse = 0
@@ -150,7 +154,13 @@ def displayBoard(board, screen):
                                 #board[indexX-explode][indexY] = 0
                             elif board[indexX-explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX-explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX-explode][indexY] = Powerup('power',900)
+								# leave a power up once terrain explodes.
+                                if powerUpDrop==0:
+                                    board[indexX-explode][indexY] = Powerup('power',900)
+                                    break
+                                else:
+                                    board[indexX-explode][indexY]=0
+                                    break
                                 break                                
                             elif board[indexX-explode][indexY].material == 'bomb':    
                                 board[indexX-explode][indexY].fuse = 0
@@ -170,7 +180,13 @@ def displayBoard(board, screen):
                                 #board[indexX][indexY-explode] = 0
                             elif board[indexX][indexY-explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY-explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY-explode] = Powerup('power',900)
+                                # leave a power up once terrain explodes.
+                                if powerUpDrop==0:
+                                    board[indexX][indexY-explode] = Powerup('power',900)
+                                    break
+                                else:
+                                    board[indexX][indexY-explode]=0
+                                    break
                                 break
                             elif board[indexX][indexY-explode].material == 'bomb':    
                                 board[indexX][indexY-explode].fuse = 0
@@ -191,7 +207,13 @@ def displayBoard(board, screen):
                                 #board[indexX][indexY+explode] = 0
                             elif board[indexX][indexY+explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY+explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY+explode] = Powerup('power',900)
+                                # leave a power up once terrain explodes.
+                                if powerUpDrop==0:
+                                    board[indexX][indexY+explode] = Powerup('power',900)
+                                    break
+                                else:
+                                    board[indexX][indexY+explode]=0
+                                    break
                                 break
                             elif board[indexX][indexY+explode].material == 'bomb':    
                                 board[indexX][indexY+explode].fuse = 0  
