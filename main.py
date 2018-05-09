@@ -130,7 +130,14 @@ def displayBoard(board, screen):
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX+explode)*CELLSIZE,CELLSIZE,CELLSIZE))
                                 
                                 # leave a power up once terrain explodes.
-                                board[indexX+explode][indexY] = Powerup('power',900)
+
+                                #if else statement to only drop a power up 1/6 times
+                                if random.randint(1,6) == 6:
+                                   board[indexX+explode][indexY] = Powerup('power',900)
+
+                                else:
+                                   board[indexX+explode][indexY] = 0
+                                #----------------------------------------------------
                                 break
                             # if a bomb, trigger bombs explosion 
                             elif board[indexX+explode][indexY].material == 'bomb':    
@@ -150,7 +157,12 @@ def displayBoard(board, screen):
                                 #board[indexX-explode][indexY] = 0
                             elif board[indexX-explode][indexY].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY)*CELLSIZE,(indexX-explode)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX-explode][indexY] = Powerup('power',900)
+                                #if else statement to only drop a power up 1/6 times
+                                if random.randint(1,6) == 6:
+                                   board[indexX-explode][indexY] = Powerup('power',900)
+                                else:
+                                   board[indexX-explode][indexY] = 0
+                              #-----------------------------------------------------board[indexX-explode][indexY] = Powerup('power',900)
                                 break                                
                             elif board[indexX-explode][indexY].material == 'bomb':    
                                 board[indexX-explode][indexY].fuse = 0
@@ -170,7 +182,13 @@ def displayBoard(board, screen):
                                 #board[indexX][indexY-explode] = 0
                             elif board[indexX][indexY-explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY-explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY-explode] = Powerup('power',900)
+                                #if else statement to only drop a power up 1/6 times
+                                if random.randint(1,6) == 6:         
+                                   board[indexX][indexY-explode] = Powerup('power',900)
+
+                                else:
+                                   board[indexX][indexY-explode] = 0
+                              #---------------------------------------------------
                                 break
                             elif board[indexX][indexY-explode].material == 'bomb':    
                                 board[indexX][indexY-explode].fuse = 0
@@ -191,7 +209,13 @@ def displayBoard(board, screen):
                                 #board[indexX][indexY+explode] = 0
                             elif board[indexX][indexY+explode].material == 'soft':
                                 pygame.draw.rect(screen, (255, 200, 0), pygame.Rect((indexY+explode)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
-                                board[indexX][indexY+explode] = Powerup('power',900)
+                                #if else statement to only drop a power up 1/6 times
+                                if random.randint(1,6) == 6:
+                                   board[indexX][indexY+explode] = Powerup('power',900)
+
+                                else:
+                                   board[indexX][indexY+explode] = 0
+                              #---------------------------------------------------
                                 break
                             elif board[indexX][indexY+explode].material == 'bomb':    
                                 board[indexX][indexY+explode].fuse = 0  
