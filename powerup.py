@@ -1,4 +1,5 @@
 import pygame
+import random
 
 #from main import * 
 
@@ -9,16 +10,40 @@ class Powerup(object):
 
 
     def __init__(self, material, time):
+        
+        num = random.randint(1,9)
         '''
         Constructor
         '''
-        self.material = material # string
-        self.fuse = time # int
-        self.image = 'images/blast.png'
+        if num <= 3:
+            self.material = material # string
+            self.fuse = time # int
+            self.image = pygame.image.load('images/powerups/blast.png')
+            self.powerup = "blast"
+        elif num == 4:
+            self.material = material # string
+            self.fuse = time # int
+            self.image = pygame.image.load('images/powerups/speed.png')
+            self.powerup = "speed"
+        elif num >= 6 and num <= 8:
+            self.material = material # string
+            self.fuse = time # int
+            self.image = pygame.image.load('images/powerups/extrabomb.png')
+            self.powerup = "extrabomb"
+        elif num == 5:
+            self.material = material # string
+            self.fuse = time # int
+            self.image = pygame.image.load('images/powerups/nuke.png')
+            self.powerup = "nuke"
+        elif num == 9:
+            self.material = material # string
+            self.fuse = time # int
+            self.image = pygame.image.load('images/powerups/time.png')
+            self.powerup = "time"
 
     def drop_powerup(screen, x,y):
-
-	    blastImage = pygame.image.load('images/blast.png')
+        pass
+	    #blastImage = pygame.image.load('images/blast.png')
 
     def blast(x,y):
 
@@ -26,9 +51,16 @@ class Powerup(object):
 
 	#blast(x,y)
     
-    # when player picksup run this function.
     def grabPowerup(self, player):
-        player.bombStrength += 1
-        #player.speed += 1
+        if self.powerup == "blast":
+            player.bombStrength += 1
+        elif self.powerup == "speed":
+            player.speed += 2
+        elif self.powerup == "extrabomb":
+            player.bombsTotal += 1
+        elif self.powerup == "nuke":
+            player.bombStrength = 13
+        elif self.powerup == "time":
+            player.fuse = 45    
 
 #drop_powerup(screen, (indexY)*CELLSIZE,(indexX-explode)*CELLSIZE)
