@@ -12,31 +12,25 @@ BOARDSIZEY = 13
 characterSpeed = 3
 CELLSIZE = 50
 
-char1WalkDown = [pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNstill.png'),pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNrightfoot.png'), pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNstill.png'), pygame.image.load('images/DOWNleftfoot.png'), pygame.image.load('images/DOWNleftfoot.png'),pygame.image.load('images/DOWNleftfoot.png')]
-char1WalkUp = [pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'),pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPrightfoot.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPstill.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png'), pygame.image.load('images/UPleftfoot.png')]
-char1WalkLeft = [pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'),pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTrightfoot.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTstill.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png'), pygame.image.load('images/LEFTleftfoot.png')]
-char1WalkRight = [pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'),pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTrightfoot.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTstill.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png'), pygame.image.load('images/RIGHTleftfoot.png')]
-
-            
-        
 
 class Character():
 
 
-    
-   
-
-
-
-
-    def __init__(self, x, y, position, colour):
+    def __init__(self, y, x, position, colour, character):
        
+        self.char1WalkDown = [pygame.image.load('images/characters/' + character + 'DOWNstill.png'), pygame.image.load('images/characters/' + character + 'DOWNstill.png'),pygame.image.load('images/characters/' + character + 'DOWNrightfoot.png'), pygame.image.load('images/characters/' + character + 'DOWNrightfoot.png'), pygame.image.load('images/characters/' + character + 'DOWNrightfoot.png'), pygame.image.load('images/characters/' + character + 'DOWNstill.png'), pygame.image.load('images/characters/' + character + 'DOWNstill.png'), pygame.image.load('images/characters/' + character + 'DOWNleftfoot.png'), pygame.image.load('images/characters/' + character + 'DOWNleftfoot.png'),pygame.image.load('images/characters/' + character + 'DOWNleftfoot.png')]
+        self.char1WalkUp = [pygame.image.load('images/characters/' + character + 'UPstill.png'), pygame.image.load('images/characters/' + character + 'UPstill.png'),pygame.image.load('images/characters/' + character + 'UPrightfoot.png'), pygame.image.load('images/characters/' + character + 'UPrightfoot.png'), pygame.image.load('images/characters/' + character + 'UPrightfoot.png'), pygame.image.load('images/characters/' + character + 'UPstill.png'), pygame.image.load('images/characters/' + character + 'UPstill.png'), pygame.image.load('images/characters/' + character + 'UPleftfoot.png'), pygame.image.load('images/characters/' + character + 'UPleftfoot.png'), pygame.image.load('images/characters/' + character + 'UPleftfoot.png')]
+        self.char1WalkLeft = [pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'),pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png')]
+        self.char1WalkRight = [pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'),pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png')]
+
+        
         self.status = "alive" # string
         self.position = position # list
         self.colour = colour # string
         self.score = 0 # int
-        self.bombsTotal = 3 # int
-        self.bombStrength = 2 # int
+        self.bombsTotal = 1 # int
+        self.bombStrength = 1 # int
+        self.fuse = 90 
         
         self.powerUps = [0] # list
         self.material = 'soft' # string
@@ -87,29 +81,29 @@ class Character():
 
         if not (self.standing):
             if self.down:
-                window.blit(char1WalkDown[self.walkCount], (self.X,self.Y))
+                window.blit(self.char1WalkDown[self.walkCount], (self.X,self.Y))
                 self.walkCount += 1            
             elif self.up:
-                window.blit(char1WalkUp[self.walkCount], (self.X,self.Y))            
+                window.blit(self.char1WalkUp[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1              
             elif self.left:
-                window.blit(char1WalkLeft[self.walkCount], (self.X,self.Y))            
+                window.blit(self.char1WalkLeft[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1
             elif self.right:
-                window.blit(char1WalkRight[self.walkCount], (self.X,self.Y))            
+                window.blit(self.char1WalkRight[self.walkCount], (self.X,self.Y))            
                 self.walkCount += 1  
         else:
             if self.down:
-                window.blit(char1WalkDown[0], (self.X,self.Y))
+                window.blit(self.char1WalkDown[0], (self.X,self.Y))
                 self.walkCount += 1            
             elif self.up:
-                window.blit(char1WalkUp[0], (self.X,self.Y))            
+                window.blit(self.char1WalkUp[0], (self.X,self.Y))            
                 self.walkCount += 1              
             elif self.left:
-                window.blit(char1WalkLeft[0], (self.X,self.Y))            
+                window.blit(self.char1WalkLeft[0], (self.X,self.Y))            
                 self.walkCount += 1
             elif self.right:
-                window.blit(char1WalkRight[0], (self.X,self.Y))            
+                window.blit(self.char1WalkRight[0], (self.X,self.Y))            
                 self.walkCount += 1  
             
         
@@ -189,7 +183,7 @@ class Character():
     
     def dropBomb(self, myboard, bombs):
         if myboard.myboard[self.position[0]][self.position[1]] == 0 and self.bombsTotal > 0:
-            myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', 90, self.bombStrength, self, self.position)
+            myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', self.fuse, self.bombStrength, self, self.position)
             bombs.append(self.position);
             self.bombsTotal -= 1
         
