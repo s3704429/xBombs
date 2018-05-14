@@ -9,20 +9,32 @@ from bomb import *
 
 def playerKeys(keypress, myboard, players, bombs):
     # for player 1 movement
+    for each in players:
+        if each.itemDeploy != 0:
+            each.itemDeploy -= 1
+    
+    
+    p1Direction = [0,0]  # tracking player direction for items hammer etc
+ 
     if keypress[pygame.K_UP]:
         players[0].moveUp(myboard)        
-            
+        p1Direction[1] -= 1
     if keypress[pygame.K_DOWN]:
         players[0].moveDown(myboard)
-            
+        p1Direction[1] += 1
     if keypress[pygame.K_LEFT]:
         players[0].moveLeft(myboard)
-         
+        p1Direction[0] -= 1
     if keypress[pygame.K_RIGHT]:
         players[0].moveRight(myboard)
-    
+        p1Direction[0] += 1
+        
     if keypress[pygame.K_KP0]:
         players[0].dropBomb(myboard, bombs)
+        
+    if keypress[pygame.K_KP1]:
+        if players[0].item != 0 and players[0].itemDeploy == 0:
+            players[0].useItem(myboard, p1Direction[0], p1Direction[1])
             
     if keypress[pygame.K_UP] != True and keypress[pygame.K_RIGHT] != True and keypress[pygame.K_LEFT] != True and keypress[pygame.K_DOWN] != True:
         players[0].standing = True
@@ -50,46 +62,47 @@ def playerKeys(keypress, myboard, players, bombs):
     
     if len(players) > 2:    
         # for player 3 movement
-        if keypress[pygame.K_KP8]:
+        if keypress[pygame.K_u]:
             players[2].moveUp(myboard)
                 
-        if keypress[pygame.K_KP5]:
+        if keypress[pygame.K_j]:
             players[2].moveDown(myboard)            
                 
-        if keypress[pygame.K_KP4]:
+        if keypress[pygame.K_h]:
             players[2].moveLeft(myboard)
              
                 
-        if keypress[pygame.K_KP6]:
+        if keypress[pygame.K_k]:
             players[2].moveRight(myboard)
                     
                     
-        if keypress[pygame.K_KP7]:
+        if keypress[pygame.K_y]:
             players[2].dropBomb(myboard, bombs)
     
-        if keypress[pygame.K_KP8] != True and keypress[pygame.K_KP5] != True and keypress[pygame.K_KP4] != True and keypress[pygame.K_KP6] != True:
+        if keypress[pygame.K_u] != True and keypress[pygame.K_j] != True and keypress[pygame.K_h] != True and keypress[pygame.K_k] != True:
             players[2].standing = True
+
             
     if len(players) > 3:      
         # for player 4 movement
-        if keypress[pygame.K_u]:
+        if keypress[pygame.K_KP8]:
             players[3].moveUp(myboard)
                 
-        if keypress[pygame.K_j]:
+        if keypress[pygame.K_KP5]:
             players[3].moveDown(myboard)            
                 
-        if keypress[pygame.K_h]:
+        if keypress[pygame.K_KP4]:
             players[3].moveLeft(myboard)
              
                 
-        if keypress[pygame.K_k]:
+        if keypress[pygame.K_KP6]:
             players[3].moveRight(myboard)
                     
                     
-        if keypress[pygame.K_y]:
+        if keypress[pygame.K_KP7]:
             players[3].dropBomb(myboard, bombs)
     
-        if keypress[pygame.K_u] != True and keypress[pygame.K_j] != True and keypress[pygame.K_h] != True and keypress[pygame.K_k] != True:
+        if keypress[pygame.K_KP8] != True and keypress[pygame.K_KP5] != True and keypress[pygame.K_KP4] != True and keypress[pygame.K_KP6] != True:
             players[3].standing = True
             
     
