@@ -248,7 +248,7 @@ class Main:
     time.sleep(7.9)
     
     textsurface = font.render(('theCoolNamePendingGroup'), False, (255, 255, 255))
-    screen.blit(textsurface,(100,300))
+    screen.blit(textsurface,(50,300))
     pygame.display.update()
     time.sleep(4)
     textsurface = font.render(('Presents'), False, (255, 255, 255))
