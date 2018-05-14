@@ -245,16 +245,16 @@ class Main:
     pygame.mixer.music.load('sound/Azureflux_-_01_-_BOMB.mp3')
     pygame.mixer.music.play()
     
-    #time.sleep(7.9)
+    time.sleep(7.9)
     
     textsurface = font.render(('theCoolNamePendingGroup'), False, (255, 255, 255))
     screen.blit(textsurface,(100,300))
     pygame.display.update()
-    #time.sleep(4)
+    time.sleep(4)
     textsurface = font.render(('Presents'), False, (255, 255, 255))
     screen.blit(textsurface,(200,350))
     pygame.display.update()
-    #time.sleep(3.3)
+    time.sleep(3.3)
     
     #load menu screen
     while end != 'quit':
