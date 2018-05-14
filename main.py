@@ -18,14 +18,15 @@ CELLSIZE = 50
 
 # preload players
 player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [BOARDSIZEX-1,BOARDSIZEY-1], "green", "Penguin")
-player2 = Character(0,0, [0,0], "red", "")
+player2 = Character(0,0, [0,0], "red", "snowman")
 player3 = Character(0,(BOARDSIZEY-1)*CELLSIZE, [0,BOARDSIZEX-1], "red", "")
-player4 = Character((BOARDSIZEY-1)*CELLSIZE,0, [BOARDSIZEX-1,0], "red", "")
+player4 = Character((BOARDSIZEY-1)*CELLSIZE,0, [BOARDSIZEX-1,0], "red", "chick")
 
 # load sound and music
 pygame.mixer.pre_init(44100, -16, 2, 4096)
 pygame.mixer.init()
 explodeSound = pygame.mixer.Sound('sound/Explosion1.wav')
+xBombSound = pygame.mixer.Sound('sound/sfx_exp_long4.wav')
 p1Death = pygame.mixer.Sound('sound/sfx_deathscream_human5.wav')
 p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
 
@@ -42,6 +43,9 @@ pExtraImg = pygame.image.load('images/powerups/extrabomb.png')
 pNukeImg = pygame.image.load('images/powerups/nuke.png')
 pSpeedImg = pygame.image.load('images/powerups/speed.png')
 pTimeImg = pygame.image.load('images/powerups/time.png')
+
+bombImages = [pygame.image.load('images/bomb.png'), pygame.image.load('images/bomb2.png')]
+
 
 #kill player
 def killPlayer(position, bomb):
@@ -71,35 +75,52 @@ def killPlayer(position, bomb):
 
 ''' Explodes the bomb as far as its range. Check what is in the path and destroys it. Or stops '''
 def explodeBomb(board, bomb, x, y, explode):
-
+    
+    if bomb.material == "xbomb":
+        if explode[0] < 0:              # -1 , -1
+            explode[1] += explode[0]
+        elif explode[0] > 0:            # 1 , 1
+            explode[1] += explode[0]
+        elif explode[1] < 0:            # 1  ,  -1
+            explode[0] -= explode[1]
+        elif explode[1] > 0:            #  -1  , 1
+            explode[0] -= explode[1]
+            
     ''' kill player if they are in grid'''
     # if player is grid kill player.
     killPlayer([x+explode[0],y+explode[1]], bomb)
         
     #explode     
     ''' grid empty show explode '''
-    if board[x+explode[0]][y+explode[1]] == 0:
-        board[x+explode[0]][y+explode[1]] = Fireball()
-    # if soft terrain then explode 
-    elif board[x+explode[0]][y+explode[1]].material == 'soft':
-        # leave a power up once terrain explodes.
-        if isinstance(board[x+explode[0]][y+explode[1]], Terrain):
-            powerUpDrop = random.randint(0,2)
-            if powerUpDrop==0:
-                board[x+explode[0]][y+explode[1]] = Fireball(board, (x+explode[0],y+explode[1]), Powerup('soft',900))
+    if 0 <= x+explode[0] <= 12 and 0 <= y+explode[1] <= 12:
+        if board[x+explode[0]][y+explode[1]] == 0:
+            board[x+explode[0]][y+explode[1]] = Fireball()
+        # if soft terrain then explode 
+        elif board[x+explode[0]][y+explode[1]].material == 'soft':
+            # leave a power up once terrain explodes.
+            if isinstance(board[x+explode[0]][y+explode[1]], Terrain):
+                powerUpDrop = random.randint(0,2)
+                if powerUpDrop==0:
+                    board[x+explode[0]][y+explode[1]] = Fireball(board, (x+explode[0],y+explode[1]), Powerup('soft',900))
+                    if bomb.material != "xbomb": 
+                        return 'stop'
+                else:
+                    board[x+explode[0]][y+explode[1]] = Fireball()
+                    if bomb.material != "xbomb": 
+                        return 'stop'
             else:
                 board[x+explode[0]][y+explode[1]] = Fireball()
+                if bomb.material != "xbomb": 
+                    return 'stop'
+        # if a bomb, trigger bombs explosion 
+        elif board[x+explode[0]][y+explode[1]].material == 'bomb':    
+            board[x+explode[0]][y+explode[1]].fuse = 0
+            if bomb.material != "xbomb": 
                 return 'stop'
-        else:
-            board[x+explode[0]][y+explode[1]] = Fireball()
-            return 'stop'
-    # if a bomb, trigger bombs explosion 
-    elif board[x+explode[0]][y+explode[1]].material == 'bomb':    
-        board[x+explode[0]][y+explode[1]].fuse = 0
-        return 'stop'
-    # if hard terrain, stop blast 
-    elif board[x+explode[0]][y+explode[1]].material == 'hard':
-        return 'stop'
+        # if hard terrain, stop blast 
+        elif board[x+explode[0]][y+explode[1]].material == 'hard':
+            if bomb.material != "xbomb": 
+                return 'stop'
 
 
 # display game data on Window.
@@ -137,16 +158,22 @@ def displayBoard(board, screen):
             # if bomb object then display at the corresponding coordinates      
             elif isinstance(y, Bomb):
                 # if fuse timer not zero just draw the bomb  
-                if y.fuse > 0:
-                    pygame.draw.rect(screen, (200, 200, 200), pygame.Rect((indexY)*CELLSIZE,(indexX)*CELLSIZE,CELLSIZE,CELLSIZE))
+                if y.fuse > 0:                    
+                    if y.fuse%2 ==0:
+                        screen.blit(bombImages[0], (indexY*CELLSIZE,indexX*CELLSIZE))
+                    else:
+                        screen.blit(bombImages[1], (indexY*CELLSIZE,indexX*CELLSIZE))
                     y.fuse -= 1
                     
                 # if the timer is 0 its time to explode bomb. Draw explosion.
                 elif y.fuse == 0:
                     y.droppedBy.bombsTotal += 1
                    
-                   #play bomb sound 
-                    explodeSound.play()
+                   #play bomb sound
+                    if y.material == 'xbomb':
+                        xBombSound.play()
+                    else: 
+                        explodeSound.play()
                     # bomb destroys everything it can
                     ''' in wrong place. Should not be in display function. Need to Move and separate graphics and grid code'''
                     ''' kill player if they are in the grid they dropped the bomb '''
@@ -218,16 +245,16 @@ class Main:
     pygame.mixer.music.load('sound/Azureflux_-_01_-_BOMB.mp3')
     pygame.mixer.music.play()
     
-    time.sleep(7.9)
+    #time.sleep(7.9)
     
     textsurface = font.render(('theCoolNamePendingGroup'), False, (255, 255, 255))
-    screen.blit(textsurface,(50,250))
+    screen.blit(textsurface,(100,300))
     pygame.display.update()
-    time.sleep(4)
+    #time.sleep(4)
     textsurface = font.render(('Presents'), False, (255, 255, 255))
-    screen.blit(textsurface,(210,350))
+    screen.blit(textsurface,(200,350))
     pygame.display.update()
-    time.sleep(3.3)
+    #time.sleep(3.3)
     
     #load menu screen
     while end != 'quit':

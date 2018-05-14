@@ -13,7 +13,7 @@ characterSpeed = 3
 CELLSIZE = 50
 
 
-class Character():
+class Character(object):
 
 
     def __init__(self, y, x, position, colour, character):
@@ -28,11 +28,12 @@ class Character():
         self.position = position # list
         self.colour = colour # string
         self.score = 0 # int
-        self.bombsTotal = 1 # int
-        self.bombStrength = 1 # int
+        self.bombsTotal = 3 # int
+        self.itemDeploy = 0
+        self.bombStrength = 4 # int
         self.fuse = 90 
         
-        self.powerUps = [0] # list
+        self.item = 0
         self.material = 'soft' # string
         self.controlKeys = None # list
         self.characterImages = None # list
@@ -71,9 +72,11 @@ class Character():
         # returns 
         pass
 
-
+    def getX(self):
+        return self.position[0]
     
-
+    def getY(self):
+        return self.position[1]
     
     def draw(self, window):
         if self.walkCount + 1 > 9:
@@ -183,8 +186,58 @@ class Character():
     
     def dropBomb(self, myboard, bombs):
         if myboard.myboard[self.position[0]][self.position[1]] == 0 and self.bombsTotal > 0:
-            myboard.myboard[self.position[0]][self.position[1]] = Bomb('soft', self.fuse, self.bombStrength, self, self.position)
+            myboard.myboard[self.position[0]][self.position[1]] = Bomb('bomb', self.fuse, self.bombStrength, self, self.position)
             bombs.append(self.position);
             self.bombsTotal -= 1
         
+    #use items code section
+    
+    def useItem(self, board, x,y):
+        
+        if self.item.selectedPowerup == "hammer" and self.item.count > 0:
+            if isinstance(board.getGridObject(self.position, x, y), Terrain):
+                if board.getGridObject(self.position, x, y).material == 'soft':
+                    board.removeObject(self.position, x, y)
+                    self.item.count -= 1
+        elif self.item.selectedPowerup == "steelHammer"  and self.item.count > 0:
+            if isinstance(board.getGridObject(self.position, x, y), Terrain):
+                board.removeObject(self.position, x, y)
+                self.item.count -= 1
+        elif self.item.selectedPowerup == "remote" and self.item.count > 0:
+            
+            for indexX in range(13):
+                for indexY in range(0,13):
+                    # if bomb object then display at the corresponding coordinates      
+                    if isinstance(board.getGridObject([indexX,indexY], 0, 0), Bomb):
+                        # if fuse timer not zero just draw the bomb
+                        if board.getGridObject([indexX,indexY], 0, 0).droppedBy == self:
+                            if self.item.count > 1:
+                                self.item.count -= 1
+                            else:
+                                self.item = 0
+                                self.fuse = 90
+                            board.getGridObject([indexX,indexY], 0, 0).fuse = 0
+                            
+               
+        elif self.item.selectedPowerup == "springBomb"and self.item.count > 0:
+            
+            f = 1
+            
+            for num in range(1,13):
+                if self.bombsTotal != 0:
+                    if self.position[0]+(y*num) < 13 and self.position[1]+(x*num) < 13 and f != 0: 
+                        if self.position[0]+(y*num) > -1 and self.position[1]+(x*num) > -1: 
+                            if board.getGridObject(self.position, x*num, y*num) == 0:
+                                board.myboard[self.position[0]+(y*num)][self.position[1]+(x*num)] = Bomb('bomb', self.fuse, self.bombStrength, self, [0,0])
+                                self.bombsTotal -= 1
+                                self.itemDeploy = 15
+                                self.item.count -= 1
+                                f = 0
+                            
+                                
+                        
+            
+        elif self.item.selectedPowerup == "xBomb":
+            board.myboard[self.position[0]][self.position[1]] = Bomb('xbomb', self.fuse, self.bombStrength, self, [0,0])
+            
     
