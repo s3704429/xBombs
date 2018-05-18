@@ -17,10 +17,19 @@ CELLSIZE = 50
 
 
 # preload players
-player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [BOARDSIZEX-1,BOARDSIZEY-1], "green", "Penguin")
-player2 = Character(0,0, [0,0], "red", "snowman")
-player3 = Character(0,(BOARDSIZEY-1)*CELLSIZE, [0,BOARDSIZEX-1], "red", "")
-player4 = Character((BOARDSIZEY-1)*CELLSIZE,0, [BOARDSIZEX-1,0], "red", "chick")
+playerCharacters = [Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [-1,-1], "green", "Penguin"),
+                      Character(0,0, [-1,-1], "red", "snowman"), Character(0,(BOARDSIZEY-1)*CELLSIZE, [-1,-1], "red", ""),
+                      Character((BOARDSIZEY-1)*CELLSIZE,0, [-1,-1], "red", "chick")]
+
+
+i,j,k,l = 0,0,0,0
+
+player1 = playerCharacters[0]
+player2 = playerCharacters[1]
+player3 = playerCharacters[2]
+player4 = playerCharacters[3]
+
+winner = 0
 
 # load sound and music
 pygame.mixer.pre_init(44100, -16, 2, 4096)
@@ -29,7 +38,8 @@ explodeSound = pygame.mixer.Sound('sound/Explosion1.wav')
 xBombSound = pygame.mixer.Sound('sound/sfx_exp_long4.wav')
 p1Death = pygame.mixer.Sound('sound/sfx_deathscream_human5.wav')
 p2Death = pygame.mixer.Sound('sound/sfx_deathscream_human13.wav')
-
+p3Death = pygame.mixer.Sound('sound/sfx_deathscream_human10.wav')
+p4Death = pygame.mixer.Sound('sound/sfx_deathscream_human2.wav')
 
 # Preload images
 
@@ -51,7 +61,11 @@ bombImages = [pygame.image.load('images/bomb.png'), pygame.image.load('images/bo
 def killPlayer(position, bomb):
     if player1.position == position:
         p1Death.play()
-        bomb.droppedBy.score += 1
+        if bomb.droppedBy != player1:
+            bomb.droppedBy.score += 1
+        else:
+            bomb.droppedBy.score -= 1
+        
         if player2.position == [0,0] or player1.position == [0,0]:
             player1.position = [BOARDSIZEX-1,0]
             player1.X = 0*CELLSIZE
@@ -62,7 +76,12 @@ def killPlayer(position, bomb):
             player1.Y = 0*CELLSIZE
     if player2.position == position:
         p2Death.play()
-        bomb.droppedBy.score += 1
+        
+        if bomb.droppedBy != player2:
+            bomb.droppedBy.score += 1
+        else:
+            bomb.droppedBy.score -= 1
+            
         if player1.position == [0,BOARDSIZEY-1] or player2.position == [0,BOARDSIZEY-1]:
             player2.position = [BOARDSIZEX-1,BOARDSIZEY-1]
             player2.X = (BOARDSIZEX-1)*CELLSIZE
@@ -71,6 +90,38 @@ def killPlayer(position, bomb):
             player2.position = [0,(BOARDSIZEX-1)]
             player2.X = (BOARDSIZEX-1)*CELLSIZE
             player2.Y = 0*CELLSIZE
+    if player3.position == position:
+        p3Death.play()
+        
+        if bomb.droppedBy != player3:
+            bomb.droppedBy.score += 1
+        else:
+            bomb.droppedBy.score -= 1
+        
+        if player4.position == [0,BOARDSIZEY-1] or player3.position == [0,BOARDSIZEY-1]:
+            player3.position = [BOARDSIZEX-1,BOARDSIZEY-1]
+            player3.X = (BOARDSIZEX-1)*CELLSIZE
+            player3.Y = (BOARDSIZEY-1)*CELLSIZE
+        else:
+            player3.position = [0,(BOARDSIZEX-1)]
+            player3.X = (BOARDSIZEX-1)*CELLSIZE
+            player3.Y = 0*CELLSIZE
+    if player4.position == position:
+        p4Death.play()
+        
+        if bomb.droppedBy != player4:
+            bomb.droppedBy.score += 1
+        else:
+            bomb.droppedBy.score -= 1
+        
+        if player3.position == [0,BOARDSIZEY-1] or player4.position == [0,BOARDSIZEY-1]:
+            player4.position = [BOARDSIZEX-1,0]
+            player4.X = 0*CELLSIZE
+            player4.Y = (BOARDSIZEX-1)*CELLSIZE
+        else:
+            player4.position = [0,0]
+            player4.X = 0*CELLSIZE
+            player4.Y = 0*CELLSIZE
 
 
 ''' Explodes the bomb as far as its range. Check what is in the path and destroys it. Or stops '''
@@ -124,7 +175,7 @@ def explodeBomb(board, bomb, x, y, explode):
 
 
 # display game data on Window.
-def displayBoard(board, screen):
+def displayBoard(board, screen, totalPlayers):
     
     # clear the window screen
     screen.fill((0,0,0)) 
@@ -212,11 +263,15 @@ def displayBoard(board, screen):
     #pygame.draw.rect(screen, (255, 0, 0), pygame.Rect((player1.position[1])*CELLSIZE,(player1.position[0])*CELLSIZE,CELLSIZE,CELLSIZE))
     #pygame.draw.rect(screen, (0, 0, 255), pygame.Rect((player2.position[1])*CELLSIZE,(player2.position[0])*CELLSIZE,CELLSIZE,CELLSIZE))
     player1.draw(screen)
-    player2.draw(screen)
+    
+    if totalPlayers > 1:
+        player2.draw(screen)
     
     #pygame.draw.rect(screen, (0, 0, 255), pygame.Rect((player3.position[1])*CELLSIZE,(player3.position[0])*CELLSIZE,CELLSIZE,CELLSIZE))
-    #player3.draw(screen)
-    #player4.draw(screen)
+    if totalPlayers > 2: 
+        player3.draw(screen)
+    if totalPlayers == 4:
+        player4.draw(screen)
    # print(player1.X, ":", player1.Y, ":", (player1.position[0])*CELLSIZE, ":", (player1.position[1])*CELLSIZE, ":STAND:", player1.standing)
 
 
@@ -225,6 +280,8 @@ class Main:
     # for infinite loop. Change end to 'quit' to exit loop.
     end = 1
     endMap = 1  
+    
+    numberOfPlayers = 2
     
     # list of bombs coordinates in grid.
     bombs = []
@@ -236,45 +293,119 @@ class Main:
     pygame.display.set_caption('xBombs')
     clock = pygame.time.Clock()
     keypress = pygame.key.get_pressed()
+   
     
     scores = ""
     
     font = pygame.font.SysFont('comicsansms', 45)
     font2 = pygame.font.SysFont('comicsansms', 35)
+    font3 = pygame.font.SysFont('comicsansms', 65)
     
     pygame.mixer.music.load('sound/Azureflux_-_01_-_BOMB.mp3')
     pygame.mixer.music.play()
     
-    #time.sleep(7.9)
+    time.sleep(7.9)
     
     textsurface = font.render(('theCoolNamePendingGroup'), False, (255, 255, 255))
-    screen.blit(textsurface,(100,300))
+    screen.blit(textsurface,(50,300))
     pygame.display.update()
-    #time.sleep(4)
+    time.sleep(4)
     textsurface = font.render(('Presents'), False, (255, 255, 255))
     screen.blit(textsurface,(200,350))
     pygame.display.update()
-    #time.sleep(3.3)
+    time.sleep(3.3)
+
+    pygame.key.set_repeat() 
     
     #load menu screen
     while end != 'quit':
         # end loop variable, change to quit to exit
         endMap = 0
+        # get keys pressed
+        keypress = pygame.key.get_pressed()
+        
+        clock.tick(10) 
+
+        if keypress[pygame.K_a]:
+            if numberOfPlayers < len(playerCharacters):
+                numberOfPlayers += 1
+            else:
+                numberOfPlayers = 1
+         
+        
+        if keypress[pygame.K_KP0]:
+            if i <= len(playerCharacters)-1:
+                global player1 
+                player1 = playerCharacters[i]
+                i += 1
+            else:
+                i = 0
+        if keypress[pygame.K_q]:
+            if j <= len(playerCharacters)-1:
+                global player2 
+                player2 = playerCharacters[j]
+                j += 1
+            else:
+                j = 0
+        if keypress[pygame.K_y]:
+            if k <= len(playerCharacters)-1:
+                global player3 
+                player3 = playerCharacters[k]
+                k += 1
+            else:
+                k = 0
+        if keypress[pygame.K_KP7]:
+            if l <= len(playerCharacters)-1:
+                global player4 
+                player4 = playerCharacters[l]
+                l += 1
+            else:
+                l = 0
         
         # create text for menu
-        textsurface = font2.render(('Press 1 to 3 for map. p to quit.'), False, (100, 200, 100))
         
         #display menu image and text
         screen.blit(backgroundFull,(0,0))
-        screen.blit(pygame.image.load('images/xBomb_img_clr.png'),(0,0))
-        screen.blit(textsurface,(100,450))
-        textsurface = font2.render("Player 1: " + str(player1.score), False, (150, 0, 0))
-        screen.blit(textsurface,(275,500))
-        textsurface = font2.render("Player 2: " + str(player2.score), False, (20, 20, 200))
-        screen.blit(textsurface,(275,550))
         
-        # get keys pressed
-        keypress = pygame.key.get_pressed()
+        textsurface = font2.render(('Press 1 to 3 = start map.     p = quit.'), False, (100, 200, 100))
+        screen.blit(textsurface,(100,450))
+        
+        
+        if winner == 0:
+            screen.blit(pygame.image.load('images/xBomb_img_clr.png'),(0,0))
+        else:
+            winnerImage = pygame.transform.scale(winner[0].char1WalkDown[0], (275, 300))
+            screen.blit(winnerImage,(200,100))
+            textsurface = font3.render(('WINNER: Player ' + str(winner[1])), False, (255, 255, 255))
+            screen.blit(textsurface,(150,50))
+           
+            
+        
+        textsurface = font2.render(('a = add players'), False, (100, 200, 100))
+        screen.blit(textsurface,(100,475))
+        textsurface = font2.render(('players trigger = change character'), False, (100, 200, 100))
+        screen.blit(textsurface,(100,500))
+        textsurface = font2.render("Player 1: " + str(player1.score), False, (150, 0, 0))
+        screen.blit(textsurface,(15,530))
+        screen.blit(player1.char1WalkDown[0],(80,560))
+        if numberOfPlayers > 1:
+            textsurface = font2.render("Player 2: " + str(player2.score), False, (20, 20, 200))
+            screen.blit(player2.char1WalkDown[0],(230,560))
+            screen.blit(textsurface,(200,530))
+        
+        if numberOfPlayers > 2:
+            textsurface = font2.render("Player 3: " + str(player3.score), False, (150, 0, 0))
+            screen.blit(textsurface,(365,530))
+            screen.blit(player3.char1WalkDown[0],(390,560))
+        if numberOfPlayers == 4:
+            textsurface = font2.render("Player 4: " + str(player4.score), False, (20, 20, 200))
+            screen.blit(player4.char1WalkDown[0],(540,560))
+            screen.blit(textsurface,(515,530))
+        
+        
+        
+        
+        
         
         #load game with map according to keypressed
         for event in pygame.event.get():
@@ -302,7 +433,20 @@ class Main:
             # start the music
             pygame.mixer.music.set_volume(0.3)
             pygame.mixer.music.play(5)
-    
+            
+            player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [BOARDSIZEX-1,BOARDSIZEY-1], "green", player1.character)
+            
+            players = [player1]
+            if numberOfPlayers > 1:
+                player2 = Character(0,0, [0,0], "red", player2.character)
+                players.append(player2)
+            if numberOfPlayers > 2:
+                player3 = Character(0,(BOARDSIZEY-1)*CELLSIZE, [0,BOARDSIZEX-1], "red", player3.character)
+                players.append(player3)
+            if numberOfPlayers == 4:
+                player4 = Character((BOARDSIZEY-1)*CELLSIZE,0, [BOARDSIZEX-1,0], "red", player4.character)
+                players.append(player4)
+            
             # start game loop
             while endMap != 'quit':
                 for event in pygame.event.get():
@@ -313,15 +457,20 @@ class Main:
                     if keypress[pygame.K_p]:
                         mapNumber = 0
                         endMap = 'quit'
+                    for int in range(0, len(players)):
+                        if players[int].score == 10:
+                            winner = [players[int],int]
+                            mapNumber = 0
+                            endMap = 'quit'
                         
                 # capture key presses
                 keypress = pygame.key.get_pressed()
                 
                 # do character actions acording to key presses
-                playerKeys(keypress, myboard, (player1, player2), bombs)
+                playerKeys(keypress, myboard, players, bombs)
                
                 # display graphics frame of board.
-                displayBoard(myboard.myboard, screen)
+                displayBoard(myboard.myboard, screen, len(players))
                         
                 pygame.display.update()
                 
