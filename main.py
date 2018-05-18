@@ -314,7 +314,7 @@ class Main:
     screen.blit(textsurface,(200,350))
     pygame.display.update()
     time.sleep(3.3)
-
+    
     pygame.key.set_repeat() 
     
     #load menu screen
