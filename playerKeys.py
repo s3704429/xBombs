@@ -20,7 +20,15 @@ def playerKeys(keypress, myboard, players, bombs):
     p4Direction = [0,0]
    
     #player 1 keys
+
     # for player 1 movement
+    for each in players:
+        if each.itemDeploy != 0:
+            each.itemDeploy -= 1
+    
+    
+    p1Direction = [0,0]  # tracking player direction for items hammer etc
+ 
     if keypress[pygame.K_UP]:
         players[0].moveUp(myboard)        
         p1Direction[1] -= 1
@@ -91,7 +99,7 @@ def playerKeys(keypress, myboard, players, bombs):
         if keypress[pygame.K_i]:
             if players[2].item != 0 and players[2].itemDeploy == 0:
                 players[2].useItem(myboard, p3Direction[0], p3Direction[1])
-            
+
         if keypress[pygame.K_u] != True and keypress[pygame.K_j] != True and keypress[pygame.K_h] != True and keypress[pygame.K_k] != True:
             players[2].standing = True
 
@@ -118,6 +126,10 @@ def playerKeys(keypress, myboard, players, bombs):
             if players[3].item != 0 and players[3].itemDeploy == 0:
                 players[3].useItem(myboard, p4Direction[0], p4Direction[1])
                 
+        if keypress[pygame.K_KP8] != True and keypress[pygame.K_KP5] != True and keypress[pygame.K_KP4] != True and keypress[pygame.K_KP6] != True:
+            players[3].standing = True
+
+    
         if keypress[pygame.K_KP8] != True and keypress[pygame.K_KP5] != True and keypress[pygame.K_KP4] != True and keypress[pygame.K_KP6] != True:
             players[3].standing = True
             

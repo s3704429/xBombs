@@ -23,7 +23,8 @@ class Character(object):
         self.char1WalkLeft = [pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'),pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTrightfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTstill.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png'), pygame.image.load('images/characters/' + character + 'LEFTleftfoot.png')]
         self.char1WalkRight = [pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'),pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTrightfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTstill.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png'), pygame.image.load('images/characters/' + character + 'RIGHTleftfoot.png')]
 
-        
+        self.character =  character
+
         self.status = "alive" # string
         self.position = position # list
         self.colour = colour # string
