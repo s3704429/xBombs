@@ -297,8 +297,8 @@ class Main:
     
     scores = ""
     
-    font = pygame.font.SysFont('comicsansms', 45)
-    font2 = pygame.font.SysFont('comicsansms', 35)
+    font = pygame.font.SysFont('comicsansms', 40)
+    font2 = pygame.font.SysFont('comicsansms', 25)
     font3 = pygame.font.SysFont('comicsansms', 65)
     
     pygame.mixer.music.load('sound/Azureflux_-_01_-_BOMB.mp3')
