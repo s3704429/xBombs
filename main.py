@@ -17,6 +17,7 @@ CELLSIZE = 50
 
 
 # preload players
+
 playerCharacters = [Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [-1,-1], "green", "Penguin"),
                       Character(0,0, [-1,-1], "red", "snowman"), Character(0,(BOARDSIZEY-1)*CELLSIZE, [-1,-1], "red", ""),
                       Character((BOARDSIZEY-1)*CELLSIZE,0, [-1,-1], "red", "chick")]
@@ -30,6 +31,7 @@ player3 = playerCharacters[2]
 player4 = playerCharacters[3]
 
 winner = 0
+
 
 # load sound and music
 pygame.mixer.pre_init(44100, -16, 2, 4096)
@@ -56,7 +58,6 @@ pTimeImg = pygame.image.load('images/powerups/time.png')
 
 bombImages = [pygame.image.load('images/bomb.png'), pygame.image.load('images/bomb2.png')]
 
-
 #kill player
 def killPlayer(position, bomb):
     if player1.position == position:
@@ -65,7 +66,6 @@ def killPlayer(position, bomb):
             bomb.droppedBy.score += 1
         else:
             bomb.droppedBy.score -= 1
-        
         if player2.position == [0,0] or player1.position == [0,0]:
             player1.position = [BOARDSIZEX-1,0]
             player1.X = 0*CELLSIZE
@@ -76,7 +76,6 @@ def killPlayer(position, bomb):
             player1.Y = 0*CELLSIZE
     if player2.position == position:
         p2Death.play()
-        
         if bomb.droppedBy != player2:
             bomb.droppedBy.score += 1
         else:
@@ -263,7 +262,7 @@ def displayBoard(board, screen, totalPlayers):
     #pygame.draw.rect(screen, (255, 0, 0), pygame.Rect((player1.position[1])*CELLSIZE,(player1.position[0])*CELLSIZE,CELLSIZE,CELLSIZE))
     #pygame.draw.rect(screen, (0, 0, 255), pygame.Rect((player2.position[1])*CELLSIZE,(player2.position[0])*CELLSIZE,CELLSIZE,CELLSIZE))
     player1.draw(screen)
-    
+
     if totalPlayers > 1:
         player2.draw(screen)
     
@@ -279,8 +278,7 @@ class Main:
     
     # for infinite loop. Change end to 'quit' to exit loop.
     end = 1
-    endMap = 1  
-    
+    endMap = 1     
     numberOfPlayers = 2
     
     # list of bombs coordinates in grid.
@@ -293,8 +291,7 @@ class Main:
     pygame.display.set_caption('xBombs')
     clock = pygame.time.Clock()
     keypress = pygame.key.get_pressed()
-   
-    
+
     scores = ""
     
     font = pygame.font.SysFont('comicsansms', 40)
@@ -321,6 +318,7 @@ class Main:
     while end != 'quit':
         # end loop variable, change to quit to exit
         endMap = 0
+
         # get keys pressed
         keypress = pygame.key.get_pressed()
         
@@ -402,11 +400,6 @@ class Main:
             screen.blit(player4.char1WalkDown[0],(540,560))
             screen.blit(textsurface,(515,530))
         
-        
-        
-        
-        
-        
         #load game with map according to keypressed
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -433,7 +426,7 @@ class Main:
             # start the music
             pygame.mixer.music.set_volume(0.3)
             pygame.mixer.music.play(5)
-            
+ 
             player1 = Character((BOARDSIZEX-1)*CELLSIZE, (BOARDSIZEY-1)*CELLSIZE, [BOARDSIZEX-1,BOARDSIZEY-1], "green", player1.character)
             
             players = [player1]
@@ -457,20 +450,24 @@ class Main:
                     if keypress[pygame.K_p]:
                         mapNumber = 0
                         endMap = 'quit'
+
                     for int in range(0, len(players)):
                         if players[int].score >= 10:
                             winner = [players[int],int]
                             mapNumber = 0
                             endMap = 'quit'
+
                         
                 # capture key presses
                 keypress = pygame.key.get_pressed()
                 
                 # do character actions acording to key presses
+
                 playerKeys(keypress, myboard, players, bombs)
                
                 # display graphics frame of board.
                 displayBoard(myboard.myboard, screen, len(players))
+
                         
                 pygame.display.update()
                 
