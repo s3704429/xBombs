@@ -1,8 +1,4 @@
-'''
-Created on 7 Apr. 2018
-
-@author: bob
-'''
+import pygame
 
 class Bomb(object):
     '''
@@ -19,8 +15,15 @@ class Bomb(object):
         self.blastRadius = blastRadius # int
         self.droppedBy = player # 
         self.gridPosition = gridPosition # list
+        self.image0 = pygame.image.load('images/bomb.png')
+        self.image1 = pygame.image.load('images/bomb2.png')
         pass
     
+    def getImage(self):
+        if self.fuse%2 ==0:
+            return self.image0
+        else:
+            return self.image1 
     
     def detonateBomb (self) :
         # returns 
