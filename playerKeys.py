@@ -40,35 +40,39 @@ def playerKeys(keypress, myboard, players, bombs):
     if keypress[pygame.K_KP1]:
         if players[0].item != 0 and players[0].itemDeploy == 0:
             players[0].useItem(myboard, p1Direction[0], p1Direction[1])
+
     # sets player 1 to standing still if no direction keys are pressed.
     if keypress[pygame.K_UP] != True and keypress[pygame.K_RIGHT] != True and keypress[pygame.K_LEFT] != True and keypress[pygame.K_DOWN] != True:
-        players[0].standing = True
+            players[0].standing = True
     
     #player 2 keys
     # for player 2 movement
-    if keypress[pygame.K_w]:
-        players[1].moveUp(myboard)
-        p2Direction[1] -= 1    
-    if keypress[pygame.K_s]:
-        players[1].moveDown(myboard)            
-        p1Direction[1] += 1    
-    if keypress[pygame.K_a]:
-        players[1].moveLeft(myboard)
-        p2Direction[0] -= 1 
-    if keypress[pygame.K_d]:
-        players[1].moveRight(myboard)
-        p2Direction[0] += 1        
-    # key for p2 drop bomb
-    if keypress[pygame.K_q]:
-        players[1].dropBomb(myboard, bombs)
-    # key for p2 to use items    
-    if keypress[pygame.K_e]:
-        if players[1].item != 0 and players[1].itemDeploy == 0:
-            players[1].useItem(myboard, p2Direction[0], p2Direction[1])
-    # sets player 2 to standing still if no direction keys are pressed.
-    if keypress[pygame.K_w] != True and keypress[pygame.K_a] != True and keypress[pygame.K_s] != True and keypress[pygame.K_d] != True:
-        players[1].standing = True
+    if len(players) > 1:
+        if keypress[pygame.K_w]:
+            players[1].moveUp(myboard)
+            p2Direction[1] -= 1    
+        if keypress[pygame.K_s]:
+            players[1].moveDown(myboard)            
+            p1Direction[1] += 1    
+        if keypress[pygame.K_a]:
+            players[1].moveLeft(myboard)
+            p2Direction[0] -= 1 
+        if keypress[pygame.K_d]:
+            players[1].moveRight(myboard)
+            p2Direction[0] += 1        
+        # key for p2 drop bomb
+        if keypress[pygame.K_q]:
+            players[1].dropBomb(myboard, bombs)
+        # key for p2 to use items    
+        if keypress[pygame.K_e]:
+            if players[1].item != 0 and players[1].itemDeploy == 0:
+                players[1].useItem(myboard, p2Direction[0], p2Direction[1])
+        # sets player 2 to standing still if no direction keys are pressed.
+        if keypress[pygame.K_w] != True and keypress[pygame.K_a] != True and keypress[pygame.K_s] != True and keypress[pygame.K_d] != True:
+            players[1].standing = True
+
     
+        
     if len(players) > 2:    
         # for player 3 movement
         if keypress[pygame.K_u]:
