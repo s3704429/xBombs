@@ -299,7 +299,7 @@ class Main:
     
     font = pygame.font.SysFont('comicsansms', 40)
     font2 = pygame.font.SysFont('comicsansms', 25)
-    font3 = pygame.font.SysFont('comicsansms', 65)
+    font3 = pygame.font.SysFont('comicsansms', 55)
     
     pygame.mixer.music.load('sound/Azureflux_-_01_-_BOMB.mp3')
     pygame.mixer.music.play()
@@ -376,7 +376,7 @@ class Main:
         else:
             winnerImage = pygame.transform.scale(winner[0].char1WalkDown[0], (275, 300))
             screen.blit(winnerImage,(200,100))
-            textsurface = font3.render(('WINNER: Player ' + str(winner[1])), False, (255, 255, 255))
+            textsurface = font3.render(('WINNER: Player ' + str(winner[1]+1)), False, (255, 255, 255))
             screen.blit(textsurface,(150,50))
            
             
@@ -458,7 +458,7 @@ class Main:
                         mapNumber = 0
                         endMap = 'quit'
                     for int in range(0, len(players)):
-                        if players[int].score == 10:
+                        if players[int].score >= 10:
                             winner = [players[int],int]
                             mapNumber = 0
                             endMap = 'quit'
