@@ -377,7 +377,7 @@ class Main:
             winnerImage = pygame.transform.scale(winner[0].char1WalkDown[0], (275, 300))
             screen.blit(winnerImage,(200,100))
             textsurface = font3.render(('WINNER: Player ' + str(winner[1]+1)), False, (255, 255, 255))
-            screen.blit(textsurface,(150,50))
+            screen.blit(textsurface,(75,50))
            
             
         
